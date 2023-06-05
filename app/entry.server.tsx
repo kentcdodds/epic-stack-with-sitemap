@@ -6,6 +6,7 @@ import { renderToPipeableStream } from 'react-dom/server'
 import { PassThrough } from 'stream'
 import { getEnv, init } from './utils/env.server.ts'
 import { NonceProvider } from './utils/nonce-provider.ts'
+import { getSitemapXml } from './utils/sitemap.server.ts'
 
 const ABORT_DELAY = 5000
 
@@ -27,6 +28,18 @@ export default async function handleRequest(...args: DocRequestArgs) {
 	responseHeaders.set('fly-app', process.env.FLY_APP_NAME ?? 'unknown')
 	responseHeaders.set('fly-primary-instance', primaryInstance)
 	responseHeaders.set('fly-instance', currentInstance)
+
+	if (new URL(request.url).pathname === '/sitemap.xml') {
+		// we'd rather do this as a resource route, but the remixContext isn't
+		// available there and we need it for the automatic sitemap generation
+		const sitemap = await getSitemapXml(request, remixContext)
+		return new Response(sitemap, {
+			headers: {
+				'Content-Type': 'application/xml',
+				'Content-Length': String(Buffer.byteLength(sitemap)),
+			},
+		})
+	}
 
 	const callbackName = isbot(request.headers.get('user-agent'))
 		? 'onAllReady'

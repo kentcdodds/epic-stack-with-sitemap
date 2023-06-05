@@ -10,7 +10,22 @@ import { Spacer } from '~/components/spacer.tsx'
 import { prisma } from '~/utils/db.server.ts'
 import { ButtonLink } from '~/utils/forms.tsx'
 import { getUserImgSrc } from '~/utils/misc.ts'
+import { type SitemapHandle } from '~/utils/sitemap.server.ts'
 import { useOptionalUser } from '~/utils/user.ts'
+
+export const handle: SitemapHandle = {
+	async getSitemapEntries({ request }) {
+		const users = await prisma.user.findMany({
+			select: { username: true, updatedAt: true },
+		})
+		return users.map(user => ({
+			changefreq: 'monthly',
+			priority: 0.5,
+			lastmod: user.updatedAt,
+			route: `/users/${user.username}`,
+		}))
+	},
+}
 
 export async function loader({ params }: DataFunctionArgs) {
 	invariant(params.username, 'Missing username')

@@ -5,6 +5,21 @@ import { DeleteNote } from '~/routes/resources+/delete-note.tsx'
 import { getUserId } from '~/utils/auth.server.ts'
 import { prisma } from '~/utils/db.server.ts'
 import { ButtonLink } from '~/utils/forms.tsx'
+import { type SitemapHandle } from '~/utils/sitemap.server.ts'
+
+export const handle: SitemapHandle = {
+	async getSitemapEntries() {
+		const note = await prisma.note.findMany({
+			select: { id: true, updatedAt: true },
+		})
+		return note.map(note => ({
+			changefreq: 'weekly',
+			priority: 0.6,
+			lastmod: note.updatedAt,
+			route: `/notes/${note.id}`,
+		}))
+	},
+}
 
 export async function loader({ request, params }: DataFunctionArgs) {
 	const userId = await getUserId(request)

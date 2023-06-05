@@ -1,6 +1,7 @@
 import type { HeadersFunction, V2_MetaFunction } from '@remix-run/node'
-import { logos, kodyRocket, stars } from './logos/logos.ts'
+import { type SitemapHandle } from '~/utils/sitemap.server.ts'
 import { combineServerTimings } from '~/utils/timing.server.ts'
+import { kodyRocket, logos, stars } from './logos/logos.ts'
 
 export const meta: V2_MetaFunction = () => [{ title: 'Epic Notes' }]
 
@@ -9,6 +10,16 @@ export const headers: HeadersFunction = ({ loaderHeaders, parentHeaders }) => {
 		'Server-Timing': combineServerTimings(parentHeaders, loaderHeaders),
 	}
 	return headers
+}
+
+export const handle: SitemapHandle = {
+	async getSitemapEntries() {
+		return {
+			changefreq: 'weekly',
+			priority: 0.9,
+			route: `/`,
+		}
+	},
 }
 
 export default function Index() {
