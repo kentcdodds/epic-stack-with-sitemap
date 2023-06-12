@@ -13,6 +13,7 @@ The most important bits are:
 1. The `app/utils/sitemap.server.ts` file which is the brains of the generation
 2. The change in `app/entry.server.tsx` which allows the sitemap to be generated
    on demand
+3. Add the sitemap to your robots.txt
 
 By applying these changes to your codebase, all routes will be added to the
 sitemap with the exception of:
