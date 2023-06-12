@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://epic-stack-template.fly.dev/sitemap.xml
+Sitemap: https://epic-stack-with-sitemap-85db.fly.dev/sitemap.xml
