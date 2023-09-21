@@ -1,3 +1,8 @@
+# DEPRECATED
+
+Sitemap support is officially included in the Epic Stack now:
+https://github.com/epicweb-dev/epic-stack/blob/main/docs/seo.md
+
 # Epic Stack with a Sitemap
 
 Often sitemaps are not necessary, however, for sites highly sensitive to search
